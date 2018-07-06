@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "../mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.cmfz.dao.MenuDao">
+    <resultMap id="MenuMap" type="Menu">
+        <id property="id" column="pmid"></id>
+        <result property="name" column="pmname"></result>
+        <result property="code" column="pmcode"></result>
+        <result property="icon" column="pmicon"></result>
+        <result property="url" column="pmurl"></result>
+        <result property="level" column="pmlevel"></result>
+        <result property="parent_id" column="pmpid"></result>
+        <collection property="menus" ofType="Menu">
+            <id property="id" column="cmid"></id>
+            <result property="name" column="cmname"></result>
+            <result property="code" column="cmcode"></result>
+            <result property="icon" column="cmicon"></result>
+            <result property="url" column="cmurl"></result>
+            <result property="level" column="cmlevel"></result>
+            <result property="parent_id" column="cmpid"></result>
+        </collection>
+    </resultMap>
+    <select id="selectAllMenu" resultMap="MenuMap">
+        select
+        p.id as pmid,
+        p.name as pmname,
+        p.code as pmcode,
+        p.icon as pmicon,
+        p.url as pmurl,
+        p.level as pmlevel,
+        p.parent_id as pmpid,
+        c.id as cmid,
+        c.name as cmname,
+        c.code as cmcode,
+        c.icon as cmicon,
+        c.url as cmurl,
+        c.level as cmlevel,
+        c.parent_id as cmpid
+        from c_menu p
+        left join c_menu c on p.id = c.parent_id
+        where p.level=1
+    </select>
+    <select id="selectAllByPid" resultType="com.baizhi.cmfz.entity.Menu">
+        select * from c_menu where parent_id = #{0}
+    </select>
+
+</mapper>
