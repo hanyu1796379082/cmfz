@@ -47,10 +47,11 @@ public class ManagerController {
         System.out.println(password  +   "    password" );
         if(password.equals(manager.getPassword())){
             if(status==true){
-                String name1 = URLEncoder.encode("name", "utf-8");
+                String name1 = URLEncoder.encode(name, "utf-8");
                 System.out.println(name1);
                 Cookie c1 = new Cookie("uname",name1);
                 Cookie c2 = new Cookie("upwd",password);
+                session.setAttribute("mgr",manager);
             }
             return "redirect:/main.jsp";
         }

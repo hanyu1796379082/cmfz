@@ -21,7 +21,7 @@
             view: detailview,
             detailFormatter: function(rowIndex, rows){
                 return '<table><tr>' +
-                    '<td rowspan=2 style="border:0"><img src="img/guru/'+rows.photo+'" style="height:300px;width: 400px" /></td>' +
+                    '<td rowspan=2 style="border:0"><img src="${pageContext.request.contextPath}/upload/guru/'+rows.photo+'" style="height:300px;width: 400px" /></td>' +
                     '<td style="border:0">' +
                     '</td>' +
                     '</tr></table>';

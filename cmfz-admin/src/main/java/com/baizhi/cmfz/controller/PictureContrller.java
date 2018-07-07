@@ -8,14 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static org.aspectj.weaver.tools.cache.SimpleCacheFactory.path;
 
 /**
  * @Author 韩雨
@@ -42,7 +44,12 @@ public class PictureContrller {
         return  map;
     }
     @RequestMapping("/add")
-    public @ResponseBody HashMap<String,Object> addPic(String path,String descrip,String status) throws  Exception{
+    public @ResponseBody HashMap<String,Object> addPic(MultipartFile myFile, String descrip, String status, HttpSession session) throws  Exception{
+
+        String realPath = session.getServletContext().getRealPath("\\");
+        String uploadPath = realPath.substring(0,realPath.lastIndexOf("\\", realPath.lastIndexOf("\\")-1))+"\\upload\\picture";
+        String path = UUID.randomUUID().toString().replace("-","")+".jpg";
+        myFile.transferTo(new File(uploadPath+"/"+path));
         Picture pic = new Picture();
         pic.setPath(path);
         pic.setDate(new java.util.Date());
@@ -57,8 +64,16 @@ public class PictureContrller {
         return  map;
     }
     @RequestMapping("/change")
-    public void changePic(Picture pic) throws Exception{
-        ps.modifyPic(pic);
+    public @ResponseBody Map<String,Object> changePic(Picture pic) throws Exception{
+        pic.setDescrip(URLEncoder.encode(pic.getDescrip(),"utf-8"));
+        HashMap<String,Object> map = new HashMap<String,Object>();
+        int result = ps.modifyPic(pic);
+        if(result>0){
+            map.put("result","success");
+        }else{
+            map.put("result","fail");
+        }
+        return map;
     }
     @RequestMapping("/remove")
     public @ResponseBody HashMap<String, Object> removePic(Integer id) throws Exception{

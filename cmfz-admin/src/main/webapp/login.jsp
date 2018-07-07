@@ -1,5 +1,5 @@
 
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8" isELIgnored="false" %>
 <%@ page import="java.net.URLDecoder" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html xmlns="http://www.w3.org/1999/xhtml">

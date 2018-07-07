@@ -15,7 +15,7 @@
                 {field:'status',title:"播放状态",width:150,sortable:true},
                 {field:'opt', title: '操作', width: 80,
                     formatter: function () {
-                        return "<a class='easyui-linkbutton'id='change' onclick='changePic()'> 修改</a>";
+                        return "<a class='easyui-linkbutton'id='picchange' onclick='changePic()'> 修改</a>";
                     }
                 }
             ]],
@@ -27,7 +27,7 @@
             view: detailview,
             detailFormatter: function(rowIndex, rows){
                 return '<table><tr>' +
-                    '<td rowspan=2 style="border:0"><img src="img/picture/'+rows.path+'" style="height:300px;width: 400px" /></td>' +
+                    '<td rowspan=2 style="border:0"><img src="${pageContext.request.contextPath}/upload/picture/'+rows.path +'" style="height:300px;width: 400px" /></td>' +
                     '<td style="border:0">' +
                     '</td>' +
                     '</tr></table>';
@@ -74,17 +74,34 @@
                 $("#tt2").datagrid("reload");
             }
         });
-        $("#change").linkbutton({
-            iconCls:'icon-edit',
-            text:'修改',
-            plain:true,
-        });
+
+    });
+    $("#picchange").linkbutton({
+        iconCls:"icon-cancel",
     })
     function changePic() {
         var item = $("#tt2").datagrid("getSelected");
+        console.log(item);
         if(item==null){
+            alert("这是修改");
         }else{
-
+            $("#dialogChange").dialog({
+                width:360,
+                height:300,
+                title:"修改用户",
+                toolbar:[{
+                    iconCls:"icon-help",
+                    text:"帮助",
+                    handler:function(){
+                        alert("这是修改");
+                    }
+                }],
+                href:"${pageContext.request.contextPath}/updatePic.jsp",
+                model:false,
+                onLoad:function(){
+                    $("#formpic").form("load",item);
+                }
+            });
         }
     }
 
@@ -98,6 +115,8 @@
 <table id="tt2"></table>
 
 <div id="dialogAdd"></div>
+
+<div id = "dialogChange"></div>
 
 
 <div id="tb" style="display: none">

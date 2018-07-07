@@ -29,12 +29,15 @@ public class ManagerServiceImpl implements ManagerService{
     @Override
     public int addManager(Manager mgr) {
         String salt = "";
+        int result = 0;
         try {
             salt = Encryption.getRandomSalt(4);
             mgr.setPassword(Encryption.encryption(mgr.getPassword()+salt));
+            mgr.setSalt(salt);
+           result =  md.insertMgr(mgr);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        return 0;
+        return result;
     }
 }

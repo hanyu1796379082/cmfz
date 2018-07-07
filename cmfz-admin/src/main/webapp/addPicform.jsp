@@ -17,10 +17,10 @@
 	});
 </script>
 
-<form id="form1" method="post" >
+<form id="form1" method="post" enctype="multipart/form-data">
 	<div>
-		<label >图片名称:</label>
-		<input class="easyui-validatebox" type="text" name="path"  data-options="required:true" />
+		<label >上传图片:</label>
+		<input class="easyui-validatebox" type="file" name="myFile"  />
 	</div>
 	<div>
 		<label >简介:</label>

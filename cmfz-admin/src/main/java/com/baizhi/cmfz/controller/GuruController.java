@@ -6,12 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * @Author 韩雨
@@ -39,9 +43,14 @@ public class GuruController {
         return map;
     }
     @RequestMapping("add")
-    public @ResponseBody Map<String, Object> addGuru(Guru guru) throws Exception{
+    public @ResponseBody Map<String, Object> addGuru(MultipartFile myFile, Guru guru, HttpSession session) throws Exception{
+        String realPath = session.getServletContext().getRealPath("\\");
+        String uploadPath = realPath.substring(0,realPath.lastIndexOf("\\", realPath.lastIndexOf("\\")-1))+"\\upload\\guru";
+        String path = UUID.randomUUID().toString().replace("-","")+".jpg";
+        myFile.transferTo(new File(uploadPath+"/"+path));
         Map<String,Object> map = new HashMap<String,Object>();
         guru.setName(URLEncoder.encode(guru.getName(),"utf-8"));
+        guru.setPhoto(path);
         guru.setSummary(URLEncoder.encode(guru.getSummary(),"utf-8"));
         int result = gs.addGuru(guru);
         if(result>0){

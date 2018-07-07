@@ -33,4 +33,16 @@ public class testMangerService {
         System.out.println(c);
         System.out.println(zs);
     }
+    @Test
+    public void test2(){
+        ApplicationContext act = new ClassPathXmlApplicationContext("/applicationContext.xml");
+        ManagerService ms = (ManagerService) act.getBean("managerServiceImpl");
+        Manager mgr = new Manager();
+        mgr.setPassword("123456");
+        mgr.setName("ww");
+        mgr.setStatus("2");
+
+        int result = ms.addManager(mgr);
+        System.out.println(result);
+    }
 }

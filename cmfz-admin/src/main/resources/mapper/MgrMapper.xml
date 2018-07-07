@@ -8,6 +8,6 @@
          select * from c_manager
      </select>
     <insert id="insertMgr">
-        insert into c_manager (name,password,salt,status) values(name,password,salt,1)
+        insert into c_manager(name,password,salt,status) values(#{name},#{password},#{salt},#{status})
     </insert>
 </mapper>
