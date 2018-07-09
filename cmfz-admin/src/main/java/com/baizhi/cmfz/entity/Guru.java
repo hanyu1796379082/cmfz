@@ -1,15 +1,23 @@
 package com.baizhi.cmfz.entity;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
+
+import java.io.Serializable;
+
 /*
 *@Description 上师实体类
 * @Author  韩雨
 * @Time 2018-7-4  15:27
 * */
-public class Guru {
+public class Guru implements Serializable{
 
+    @Excel(name="编号")
     private Integer id;
+    @Excel(name="法名")
     private String name;
+    @Excel(name="图片")
     private String photo;
+    @Excel(name="描述信息")
     private String summary;
 
     public Guru(Integer id, String name, String photo, String summary) {

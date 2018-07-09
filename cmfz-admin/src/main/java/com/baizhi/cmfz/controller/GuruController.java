@@ -1,5 +1,7 @@
 package com.baizhi.cmfz.controller;
 
+import cn.afterturn.easypoi.excel.ExcelImportUtil;
+import cn.afterturn.easypoi.excel.entity.ImportParams;
 import com.baizhi.cmfz.entity.Guru;
 import com.baizhi.cmfz.service.GuruService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.io.IOException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -33,13 +36,15 @@ public class GuruController {
     public @ResponseBody Map<String,Object> selectGuru(Integer page,Integer rows) throws Exception{
         Map<String,Object> map = new HashMap<String,Object>();
         List<Guru> gurus = gs.queryGuru(page, rows);
-        for (Guru guru : gurus) {
-            guru.setName(URLDecoder.decode(guru.getName(),"utf-8"));
-            guru.setSummary(URLDecoder.decode(guru.getSummary(),"utf-8"));
-        }
         int count = gs.queryGuruCount();
         map.put("total",count);
         map.put("rows", gurus);
+        return map;
+    }
+
+    @RequestMapping("anyAll")
+    public @ResponseBody Map<String,Object> selectAnyGuru(String name,Integer page,Integer rows) throws Exception{
+        Map<String, Object> map = gs.queryGuruByName(name, page, rows);
         return map;
     }
     @RequestMapping("add")
@@ -49,9 +54,8 @@ public class GuruController {
         String path = UUID.randomUUID().toString().replace("-","")+".jpg";
         myFile.transferTo(new File(uploadPath+"/"+path));
         Map<String,Object> map = new HashMap<String,Object>();
-        guru.setName(URLEncoder.encode(guru.getName(),"utf-8"));
         guru.setPhoto(path);
-        guru.setSummary(URLEncoder.encode(guru.getSummary(),"utf-8"));
+
         int result = gs.addGuru(guru);
         if(result>0){
             map.put("result","true");
@@ -64,8 +68,6 @@ public class GuruController {
     public @ResponseBody Map<String, Object> changeGuru(Guru guru) throws Exception{
         System.out.println(guru);
         Map<String,Object> map = new HashMap<String,Object>();
-        guru.setName(URLEncoder.encode(guru.getName(),"utf-8"));
-        guru.setSummary(URLEncoder.encode(guru.getSummary(),"utf-8"));
         int result = gs.modifyGuru(guru);
         if(result>0){
             map.put("result","true");
@@ -73,6 +75,22 @@ public class GuruController {
             map.put("result","false");
         }
         return map;
+    }
+    @RequestMapping("/addBatch")
+    @ResponseBody
+    public String addBatch(MultipartFile myFile ) {
+        try {
+            ImportParams ip = new ImportParams();
+            List<Guru> gurus = ExcelImportUtil.importExcel(myFile.getInputStream(), Guru.class, ip);
+            int result = gs.addGurus(gurus);
+            for (Guru guru : gurus) {
+                System.out.println(guru);
+            }
+            System.out.println(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

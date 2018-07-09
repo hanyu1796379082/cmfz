@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "../mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.cmfz.dao.AreaDao">
+    <select id="selectArea" resultType="Area">
+        select * from c_area where sex = #{0}
+    </select>
+    <select id="selectAllArea" resultType="Area">
+        select * from c_area
+    </select>
+</mapper>

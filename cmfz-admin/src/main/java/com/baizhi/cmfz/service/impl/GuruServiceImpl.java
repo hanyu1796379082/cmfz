@@ -24,6 +24,7 @@ public class GuruServiceImpl implements GuruService {
     private GuruDao gd;
 
     @Override
+    @Transactional(readOnly = true)
     public List<Guru> queryGuru(Integer page, Integer rows){
             page = (page-1)*rows;
         List<Guru> gurus = gd.selectAllGuru(page, rows);
@@ -31,6 +32,18 @@ public class GuruServiceImpl implements GuruService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public Map<String, Object> queryGuruByName(String name, Integer page, Integer rows) {
+        Map<String,Object> map = new HashMap<String,Object>();
+        List<Guru> gurus = gd.selectGuruByFname(name, (page - 1) * rows, rows);
+        int count = gd.selectGuruByFnameCount(name);
+        map.put("total",count);
+        map.put("rows", gurus);
+        return map;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public int queryGuruCount() {
         return gd.selectGuruCount();
     }
@@ -44,5 +57,11 @@ public class GuruServiceImpl implements GuruService {
     @Override
     public int addGuru(Guru guru) {
         return gd.insertGuru(guru);
+    }
+
+    @Override
+    public int addGurus(List<Guru> gurus) {
+        int result = gd.insertGurus(gurus);
+        return result;
     }
 }

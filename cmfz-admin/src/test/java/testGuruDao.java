@@ -7,6 +7,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.List;
 
 /**
  * @Author 韩雨
@@ -24,5 +25,22 @@ public class testGuruDao {
         guru.setSummary(URLEncoder.encode("这是个好上师","utf-8"));
         int i = gd.insertGuru(guru);
         System.out.println(i);
+    }
+
+    @Test
+    public void test2(){
+        ApplicationContext act = new ClassPathXmlApplicationContext("/applicationContext.xml");
+        GuruDao gd= (GuruDao) act.getBean("guruDao");
+        List<Guru> gurus = gd.selectGuruByFname("仁", 0, 2);
+        for (Guru guru : gurus) {
+            System.out.println(guru);
+        }
+    }
+    @Test
+    public void test3(){
+        ApplicationContext act = new ClassPathXmlApplicationContext("/applicationContext.xml");
+        GuruDao gd= (GuruDao) act.getBean("guruDao");
+        int count = gd.selectGuruByFnameCount("仁");
+        System.out.println(count);
     }
 }

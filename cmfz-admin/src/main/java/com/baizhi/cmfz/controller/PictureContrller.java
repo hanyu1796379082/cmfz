@@ -34,9 +34,6 @@ public class PictureContrller {
     public  @ResponseBody Map<String,Object> selectAll(Integer page, Integer rows) throws Exception{
         System.out.println(page);
         List<Picture> pictures = ps.queryAllPic(page,rows);
-        for (Picture picture : pictures) {
-            picture.setDescrip(URLDecoder.decode(picture.getDescrip(),"utf-8"));
-        }
         int count = ps.queryPicCount();
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("total",count);
@@ -53,9 +50,8 @@ public class PictureContrller {
         Picture pic = new Picture();
         pic.setPath(path);
         pic.setDate(new java.util.Date());
-        pic.setDescrip(URLEncoder.encode(descrip,"utf-8"));
         pic.setStatus(status);
-        System.out.println(pic);
+        pic.setDescrip(descrip);
         HashMap<String,Object> map = new HashMap<String,Object>();
         int result = ps.addPic(pic);
         if(result>0){
@@ -65,7 +61,6 @@ public class PictureContrller {
     }
     @RequestMapping("/change")
     public @ResponseBody Map<String,Object> changePic(Picture pic) throws Exception{
-        pic.setDescrip(URLEncoder.encode(pic.getDescrip(),"utf-8"));
         HashMap<String,Object> map = new HashMap<String,Object>();
         int result = ps.modifyPic(pic);
         if(result>0){

@@ -13,4 +13,17 @@
         <insert id="insertGuru">
             insert into c_guru(name,photo,summary) values(#{name},#{photo},#{summary})
         </insert>
+        <select id="selectGuruByFname" resultType="com.baizhi.cmfz.entity.Guru">
+            select * from c_guru where name like concat(concat('%',#{name}),'%') limit #{page},#{rows}
+        </select>
+        <select id="selectGuruByFnameCount" resultType="int">
+            select count(*) from c_guru where name like concat(concat('%',#{name}),'%')
+        </select>
+        <insert id="insertGurus">
+            insert into c_guru
+            values
+            <foreach collection="gurus" separator="," item="guru" >
+                (#{guru.id},#{guru.name},#{guru.photo},#{guru.summary})
+            </foreach>
+        </insert>
 </mapper>

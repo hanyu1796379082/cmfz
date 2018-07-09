@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "../mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.cmfz.dao.ArticleDao">
+        <select id="selectAllArt" resultType="com.baizhi.cmfz.entity.Article">
+                select * from c_article limit #{page},#{rows}
+        </select>
+        <select id="selectAnyArt" resultType="com.baizhi.cmfz.entity.Article">
+                select * from c_article where ${name} like concat(concat('%',#{value}),'%') limit #{page},#{rows}
+        </select>
+        <insert id="insertArt">
+                insert into c_article (name,guruid,introduction,date,pic)
+                values(#{name},#{guruid},#{introduction},#{date},#{pic})
+        </insert>
+        <update id="updateArt">
+            update c_article set name=#{name},guruid=#{guruid},introduction=#{introduction}
+            date = #{date},pic=#{pic} where id = #{id}
+        </update>
+        <select id="selectAnyArtCount" resultType="int">
+            select count(*) from c_article where ${name} like concat(concat('%',#{value}),'%')
+        </select>
+        <select id="selectAllArtCount" resultType="int">
+            select count(*) from c_article
+        </select>
+</mapper>
